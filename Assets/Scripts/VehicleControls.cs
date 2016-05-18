@@ -9,7 +9,8 @@ public class VehicleControls : MonoBehaviour
 
     public Vector3 Acceleration;
     public Vector3 Velocity;
-    float Speed; 
+    float Speed;
+
     void Start()
     {
         initialRotation = Input.acceleration;
@@ -20,15 +21,25 @@ public class VehicleControls : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (temp)
-        {
-            initialRotation = Input.acceleration;
-            temp = false;
-        }
+        //if (temp)
+        //{
+        //    initialRotation = Input.acceleration;
+        //    temp = false;
+        //}
 
+        //Movement();
+
+        Debug.Log(Input.acceleration.x);
+
+        
+    }
+
+    void Movement()
+    {
         if (Input.acceleration.x < -.05 || Input.acceleration.x > .05)
         {
             Wheel.transform.Rotate(Wheel.transform.forward, -Input.acceleration.x);
+            Debug.Log(Wheel.transform.localEulerAngles.z);
             gameObject.transform.Rotate(transform.up, Input.acceleration.x * (Mathf.PI * Speed));
         }
 
@@ -59,37 +70,5 @@ public class VehicleControls : MonoBehaviour
         }
 
         transform.position += transform.forward * Speed;
-
-        //Movement();
-    }
-
-    void Movement()
-    {
-        foreach(Touch t in Input.touches)
-        {
-            if (t.phase == TouchPhase.Began || t.phase == TouchPhase.Stationary || t.phase == TouchPhase.Moved)
-            {
-                if (t.position.x > 375)
-                {
-                    Acceleration += new Vector3(0, 0, transform.forward.z);
-                }
-                //if (t.position.x < 375)
-                //{
-                //    Acceleration += new Vector3(0, 0, -transform.forward.z);
-                //}
-            }
-            if(t.phase == TouchPhase.Ended)
-            {
-                noGas = true;
-            }
-        }
-
-
-        if(Acceleration.z > 0)
-        {
-            Velocity = Acceleration + Velocity.normalized;
-            transform.position += Velocity * Time.deltaTime;
-        }
-
     }
 }
