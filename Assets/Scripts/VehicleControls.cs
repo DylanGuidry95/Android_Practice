@@ -28,8 +28,8 @@ public class VehicleControls : MonoBehaviour
 
         if (Input.acceleration.x < -.05 || Input.acceleration.x > .05)
         {
-            Wheel.transform.localRotation = new Quaternion(initialRotation.x, initialRotation.y, (Input.acceleration.x - initialRotation.x) * Speed, initialRotation.z);
-            transform.Rotate(transform.up, Input.acceleration.x * (Mathf.PI * Speed));
+            Wheel.transform.Rotate(Wheel.transform.forward, -Input.acceleration.x);
+            gameObject.transform.Rotate(transform.up, Input.acceleration.x * (Mathf.PI * Speed));
         }
 
         foreach (Touch t in Input.touches)
@@ -58,7 +58,7 @@ public class VehicleControls : MonoBehaviour
                 Speed += .4f * Time.deltaTime;
         }
 
-        transform.position += transform.forward * Input.acceleration.y;
+        transform.position += transform.forward * Speed;
 
         //Movement();
     }
