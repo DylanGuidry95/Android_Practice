@@ -21,17 +21,17 @@ public class VehicleControls : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        //if (temp)
-        //{
-        //    initialRotation = Input.acceleration;
-        //    temp = false;
-        //}
+        if (temp)
+        {
+            initialRotation = Input.acceleration;
+            temp = false;
+        }
 
-        //Movement();
+        Movement();
 
-        Debug.Log(Input.acceleration.x);
+        //Debug.Log(Input.acceleration.x);
 
-        
+
     }
 
     void Movement()

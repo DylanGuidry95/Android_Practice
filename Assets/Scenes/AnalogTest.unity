@@ -901,7 +901,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 919223321}
   - 114: {fileID: 919223320}
-  - 114: {fileID: 919223322}
   m_Layer: 0
   m_Name: CarTwo
   m_TagString: Untagged
@@ -915,7 +914,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 919223319}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5aa5474578f36f7488374ce41d0440cb, type: 3}
   m_Name: 
@@ -943,19 +942,6 @@ Transform:
   - {fileID: 1149371803}
   m_Father: {fileID: 0}
   m_RootOrder: 1
---- !u!114 &919223322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 919223319}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a61304c1dd892941ba0698858422d15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TotalRotation: 0
-  Wheel: {fileID: 1685629308}
 --- !u!1 &1036574162
 GameObject:
   m_ObjectHideFlags: 0
