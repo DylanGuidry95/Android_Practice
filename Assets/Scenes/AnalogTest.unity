@@ -365,7 +365,7 @@ Transform:
   m_Children:
   - {fileID: 1751896705}
   - {fileID: 2097498455}
-  m_Father: {fileID: 919223321}
+  m_Father: {fileID: 919223320}
   m_RootOrder: 4
 --- !u!1 &288995975
 GameObject:
@@ -811,7 +811,7 @@ Transform:
   m_Children:
   - {fileID: 1162068976}
   - {fileID: 288995976}
-  m_Father: {fileID: 919223321}
+  m_Father: {fileID: 919223320}
   m_RootOrder: 5
 --- !u!1 &746226957
 GameObject:
@@ -899,8 +899,7 @@ GameObject:
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 919223321}
-  - 114: {fileID: 919223320}
+  - 4: {fileID: 919223320}
   m_Layer: 0
   m_Name: CarTwo
   m_TagString: Untagged
@@ -908,29 +907,14 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &919223320
-MonoBehaviour:
+--- !u!4 &919223320
+Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 919223319}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa5474578f36f7488374ce41d0440cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initialRotation: {x: 0, y: 0, z: 0}
-  Wheel: {fileID: 1685629308}
-  Acceleration: {x: 0, y: 0, z: 0}
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!4 &919223321
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 431758, guid: a025d597d929e5c4b9a199f26aff7e84, type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 919223319}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -38.759052, y: 0.69, z: -31.618504}
+  m_LocalPosition: {x: -38.75905, y: 0.6899986, z: -31.618504}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1377362704}
@@ -941,7 +925,7 @@ Transform:
   - {fileID: 742860698}
   - {fileID: 1149371803}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 4
 --- !u!1 &1036574162
 GameObject:
   m_ObjectHideFlags: 0
@@ -969,7 +953,7 @@ Transform:
   m_Children:
   - {fileID: 1092173953}
   - {fileID: 1172582220}
-  m_Father: {fileID: 919223321}
+  m_Father: {fileID: 919223320}
   m_RootOrder: 2
 --- !u!1 &1051673688
 GameObject:
@@ -1070,7 +1054,7 @@ RectTransform:
   - {fileID: 1635319614}
   - {fileID: 1685629309}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -1341,7 +1325,7 @@ Transform:
   m_LocalPosition: {x: -0.383, y: 0.682, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 919223321}
+  m_Father: {fileID: 919223320}
   m_RootOrder: 6
 --- !u!81 &1149371804
 AudioListener:
@@ -1606,7 +1590,7 @@ Transform:
   - {fileID: 364545091}
   - {fileID: 1107515547}
   - {fileID: 746226958}
-  m_Father: {fileID: 919223321}
+  m_Father: {fileID: 919223320}
   m_RootOrder: 0
 --- !u!1 &1399284199
 GameObject:
@@ -1682,7 +1666,7 @@ Transform:
   m_LocalScale: {x: 10, y: 1, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!1 &1456100969
 GameObject:
   m_ObjectHideFlags: 0
@@ -1710,7 +1694,7 @@ Transform:
   m_Children:
   - {fileID: 296729403}
   - {fileID: 1591645350}
-  m_Father: {fileID: 919223321}
+  m_Father: {fileID: 919223320}
   m_RootOrder: 3
 --- !u!1 &1564240678
 GameObject:
@@ -1772,7 +1756,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!1 &1591645349
 GameObject:
   m_ObjectHideFlags: 0
@@ -2227,7 +2211,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 171686579}
-  m_Father: {fileID: 919223321}
+  m_Father: {fileID: 919223320}
   m_RootOrder: 1
 --- !u!1 &1923312079
 GameObject:
