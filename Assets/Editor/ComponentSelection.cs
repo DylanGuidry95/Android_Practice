@@ -7,9 +7,9 @@ using UnityEngine.Networking;
 
 public class ComponentSelection : EditorWindow
 {
-    static GameObject Active;
+    static Transform Active;
 
-    public static void CreateWindow(Rect p, ref GameObject a)
+    public static void CreateWindow(Rect p, ref Transform a)
     {
         ComponentSelection window = (ComponentSelection)EditorWindow.GetWindow(typeof(ComponentSelection));
         window.Show();
@@ -84,11 +84,13 @@ public class ComponentSelection : EditorWindow
                     ScriptSelectedComponents[ScriptComponentNames.IndexOf(t)] = EditorGUILayout.Toggle(t, ScriptSelectedComponents[ScriptComponentNames.IndexOf(t)]);
                     if (ScriptSelectedComponents[ScriptComponentNames.IndexOf(t)] == true && Active.GetComponent(ScriptComponents[ScriptComponentNames.IndexOf(t)]) == null)
                     {
-                        Active.AddComponent(ScriptComponents[ScriptComponentNames.IndexOf(t)]);
+                        Active.gameObject.AddComponent(ScriptComponents[ScriptComponentNames.IndexOf(t)]);
+                        CustomInspectorWindow.GetActiveObjectComponents(Active);
                     }
                     else if (Active.GetComponent(ScriptComponents[ScriptComponentNames.IndexOf(t)]) != null && ScriptSelectedComponents[ScriptComponentNames.IndexOf(t)] == false)
                     {
                         SafeDestroy(Active.GetComponent(ScriptComponents[ScriptComponentNames.IndexOf(t)]));
+                        CustomInspectorWindow.GetActiveObjectComponents(Active);
                     }
                 }
             }

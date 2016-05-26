@@ -900,6 +900,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 919223320}
+  - 114: {fileID: 919223322}
+  - 114: {fileID: 919223321}
   m_Layer: 0
   m_Name: CarTwo
   m_TagString: Untagged
@@ -926,6 +928,34 @@ Transform:
   - {fileID: 1149371803}
   m_Father: {fileID: 0}
   m_RootOrder: 4
+--- !u!114 &919223321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 919223319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa5474578f36f7488374ce41d0440cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialRotation: {x: 0, y: 0, z: 0}
+  Wheel: {fileID: 0}
+  Acceleration: {x: 0, y: 0, z: 0}
+  Velocity: {x: 0, y: 0, z: 0}
+--- !u!114 &919223322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 919223319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a61304c1dd892941ba0698858422d15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TotalRotation: 0
+  Wheel: {fileID: 0}
 --- !u!1 &1036574162
 GameObject:
   m_ObjectHideFlags: 0
@@ -1562,6 +1592,50 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1275356147}
+--- !u!1 &1374908502
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1374908504}
+  - 114: {fileID: 1374908503}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1374908503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1374908502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 846b5d7f4d46423419eb641fcf77945b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_someInt: 0
+  m_someFloat: 0
+  m_someBool: 0
+  m_someString: 
+  m_Obj: {fileID: 0}
+--- !u!4 &1374908504
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1374908502}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
 --- !u!1 &1377362703
 GameObject:
   m_ObjectHideFlags: 0
