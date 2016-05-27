@@ -6,10 +6,14 @@ using System.Reflection;
 
 public class CustomInspectorWindow : EditorWindow
 {
-    static ExposableMonobehavior m_Instance;
-    static PropertyField[] m_fields;
+    static List<ExposableMonobehavior> Components;
+    static List<PropertyField[]> ComponentFields;
+    
+    static List<bool> ActiveComponentsView;
 
+    bool addComponents = false;
     static Transform selectedObject;
+
     // Add menu named "My Window" to the Window menu
     [MenuItem("Window/Custom Inspector")]
     static void Init()
@@ -19,44 +23,27 @@ public class CustomInspectorWindow : EditorWindow
         window.Show();
     }
 
-    bool addComponents = false;
-    static List<bool> ActiveComponentsView;
-
     public static void GetActiveObjectComponents(Transform active)
     {
+        ComponentFields = new List<PropertyField[]>();
+        Components = new List<ExposableMonobehavior>();
         ActiveComponentsView = new List<bool>();
-        temps = new List<string>();
         if (active != null)
         {
-            Debug.Log("passed");
             if (active.GetComponent<RectTransform>() == null && active.gameObject != null)
             {
-                Debug.Log("hit");
-                selectedObject = active;
-                if (selectedObject.GetType().IsAssignableFrom(typeof(ExposableMonobehavior)))
+                selectedObject = active; ;
+                foreach (ExposableMonobehavior c in selectedObject.GetComponents(typeof(ExposableMonobehavior)))
                 {
-                    Debug.Log("Get Info");
-                    m_Instance = selectedObject.GetComponent<ExposableMonobehavior>();
-                    m_fields = ExposeProperties.GetProperties(m_Instance);
-                    foreach (PropertyField p in m_fields)
-                    {
-                        temps.Add(p.Name);
-                    }
+                    Components.Add(c);
+                    PropertyField[] fields = ExposeProperties.GetProperties(c);
+                    ComponentFields.Add(fields);
+                    ActiveComponentsView.Add(true);
                 }
             }
-            //if (active.GetComponent<RectTransform>() == null && active.gameObject != null)
-            //{
-            //    selectedObject = active;;
-            //    foreach (Component c in selectedObject.GetComponents(typeof(Component)))
-            //    {
-            //        ActiveComponentsView.Add(false);
-            //    }
-            //}
         }
     }
 
-    int t;
-    static List<string> temps;
     void OnGUI()
     {
         Transform a = Selection.activeTransform;
@@ -71,21 +58,45 @@ public class CustomInspectorWindow : EditorWindow
             {
                 GetActiveObjectComponents(a);
             }
-            t = EditorGUILayout.Popup(t, temps.ToArray());
-            //if (ActiveComponentsView.Count != 0 || ActiveComponentsView != null)
-            //{
-            //    for (int i = 0; i < ActiveComponentsView.Count; i++)
-            //    {
-            //        ActiveComponentsView[i] = EditorGUILayout.Foldout(ActiveComponentsView[i], selectedObject.GetComponents(typeof(Component))[i].GetType().ToString());
-            //        GUILayout.Box("", new GUILayoutOption[] { GUILayout.ExpandWidth(true), GUILayout.Height(1) });
-            //    }
-            //}
 
-            //addComponents = GUI.Button(new Rect(10, position.height - 30, position.width - 20, 25), "Add Component");
-            //if (addComponents)
-            //{
-            //    ComponentSelection.CreateWindow(new Rect(position.x + 5, position.y + 50, position.width - 20 / 2, 25), ref selectedObject);
-            //}
+            if(Components != null && ComponentFields != null)
+            {
+                if (Event.current.Equals(Event.KeyboardEvent("^left")))
+                    CollapseComponents(false);
+                if (Event.current.Equals(Event.KeyboardEvent("^right")))
+                    CollapseComponents(true);
+
+                if (GUI.Button(new Rect(10, position.height - 65, position.width / 2, 25), "Collapse"))
+                {
+                    CollapseComponents(false);
+                }
+                if (GUI.Button(new Rect(position.width / 2, position.height - 65, (position.width / 2) - 10, 25), "Expand"))
+                {
+                    CollapseComponents(true);
+                }
+
+                    for (int i = 0; i < Components.Count; i++)
+                {
+                    ActiveComponentsView[i] = EditorGUILayout.Foldout(ActiveComponentsView[i],Components[i].GetType().ToString());
+                    if(ActiveComponentsView[i])
+                        ExposeProperties.Expose(ComponentFields[i]);
+                    GUILayout.Box("", new GUILayoutOption[] { GUILayout.ExpandWidth(true), GUILayout.Height(1) });
+                }
+            }
+
+            addComponents = GUI.Button(new Rect(10, position.height - 30, position.width - 20, 25), "Add Component");
+            if (addComponents)
+            {
+                ComponentSelection.CreateWindow(new Rect(position.x + 5, position.y + 50, position.width - 20 / 2, 25), ref selectedObject);
+            }
+        }
+    }
+
+    void CollapseComponents(bool state)
+    {
+        for (int i = 0; i < ActiveComponentsView.Count; i++)
+        {
+            ActiveComponentsView[i] = state;
         }
     }
 

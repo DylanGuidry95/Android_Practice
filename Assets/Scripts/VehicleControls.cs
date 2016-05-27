@@ -1,74 +1,104 @@
 ﻿using UnityEngine;
 using System.Collections;
-namespace Scripts
+public class VehicleControls : ExposableMonobehavior
 {
-    public class VehicleControls : MonoBehaviour
+    // Use this for initialization
+    [HideInInspector, SerializeField]
+    private Vector3 initialRotation;
+    [HideInInspector, SerializeField]
+    private MonoBehaviour Wheel;
+
+    [HideInInspector, SerializeField]
+    private Vector3 Acceleration;
+    [HideInInspector, SerializeField]
+    private Vector3 Velocity;
+    private float Speed;
+
+    [ExposeProperty]
+    public Vector3 StartRotation
     {
-        // Use this for initialization
-        public Vector3 initialRotation;
-        public GameObject Wheel;
+        get { return initialRotation; }
+        set { initialRotation = value; }
+    }
 
-        public Vector3 Acceleration;
-        public Vector3 Velocity;
-        float Speed;
+    [ExposeProperty]
+    public MonoBehaviour Steering
+    {
+        get { return Wheel; }
+        set { Wheel = value; }
+    }
 
-        void Start()
+    [ExposeProperty]
+    public Vector3 Accel
+    {
+        get { return Acceleration; }
+        set { Acceleration = value; }
+    }
+
+    [ExposeProperty]
+    public Vector3 Vel
+    {
+        get { return Velocity; }
+        set { Velocity = value; }
+    }
+
+    void Start()
+    {
+        initialRotation = Input.acceleration;
+    }
+
+    bool temp = true;
+    bool noGas = true;
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if (temp)
         {
             initialRotation = Input.acceleration;
+            temp = false;
         }
 
-        bool temp = true;
-        bool noGas = true;
-        // Update is called once per frame
-        void FixedUpdate()
+        Movement();
+
+        //Debug.Log(Input.acceleration.x);
+    }
+
+    void Movement()
+    {
+        if (Input.acceleration.x < -.05 || Input.acceleration.x > .05)
         {
-            if (temp)
-            {
-                initialRotation = Input.acceleration;
-                temp = false;
-            }
-
-            Movement();
-
-            //Debug.Log(Input.acceleration.x);
+            Wheel.transform.Rotate(Wheel.transform.forward, -Input.acceleration.x);
+            Debug.Log(Wheel.transform.localEulerAngles.z);
+            gameObject.transform.Rotate(transform.up, Input.acceleration.x * (Mathf.PI * Speed));
         }
 
-        void Movement()
+        foreach (Touch t in Input.touches)
         {
-            if (Input.acceleration.x < -.05 || Input.acceleration.x > .05)
+            if (t.phase == TouchPhase.Began || t.phase == TouchPhase.Stationary)
             {
-                Wheel.transform.Rotate(Wheel.transform.forward, -Input.acceleration.x);
-                Debug.Log(Wheel.transform.localEulerAngles.z);
-                gameObject.transform.Rotate(transform.up, Input.acceleration.x * (Mathf.PI * Speed));
+                noGas = false;
+                if (Speed < 1 && t.position.x > 375)
+                    Speed += .2f * Time.deltaTime;
+                if (Speed < 1 && t.position.x < 375)
+                    Speed -= .2f * Time.deltaTime;
             }
-
-            foreach (Touch t in Input.touches)
+            if (t.phase == TouchPhase.Ended)
             {
-                if (t.phase == TouchPhase.Began || t.phase == TouchPhase.Stationary)
-                {
-                    noGas = false;
-                    if (Speed < 1 && t.position.x > 375)
-                        Speed += .2f * Time.deltaTime;
-                    if (Speed < 1 && t.position.x < 375)
-                        Speed -= .2f * Time.deltaTime;
-                }
-                if (t.phase == TouchPhase.Ended)
-                {
-                    noGas = true;
-                }
+                noGas = true;
             }
-
-            if (noGas)
-            {
-                if (Speed > 0)
-                    Speed -= .4f * Time.deltaTime;
-                if (Speed < .1f && Speed > -.1f)
-                    Speed = 0;
-                if (Speed < 0)
-                    Speed += .4f * Time.deltaTime;
-            }
-
-            transform.position += transform.forward * Speed;
         }
+
+        if (noGas)
+        {
+            if (Speed > 0)
+                Speed -= .4f * Time.deltaTime;
+            if (Speed < .1f && Speed > -.1f)
+                Speed = 0;
+            if (Speed < 0)
+                Speed += .4f * Time.deltaTime;
+        }
+
+        transform.position += transform.forward * Speed;
     }
 }
+

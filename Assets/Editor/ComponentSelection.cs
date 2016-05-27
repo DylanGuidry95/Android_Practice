@@ -75,9 +75,11 @@ public class ComponentSelection : EditorWindow
         if (ScriptToggle)
         {
             EditorGUILayout.LabelField("Num of elements", ScriptComponents.Count.ToString());
+            EditorGUILayout.LabelField("Num of bools", ScriptComponents.Count.ToString());
+            EditorGUILayout.LabelField("Num of names", ScriptComponents.Count.ToString());
             NameSpace = EditorGUILayout.DelayedTextField("Scripts in namespace", NameSpace);
             GetScripts(NameSpace);
-            if(ScriptComponentNames.Count > 0)
+            if (ScriptComponentNames.Count > 0)
             {
                 foreach (string t in ScriptComponentNames)
                 {
@@ -185,19 +187,21 @@ public class ComponentSelection : EditorWindow
 
     void GetScripts(string n)
     {
-        if(CheckNameSpace != NameSpace)
+        ////Script
+        if (GetAllSubTypes(typeof(ExposableMonobehavior)).Length == 0)
         {
+            Debug.Log("hit");
             ScriptComponents = new List<System.Type>();
             ScriptComponentNames = new List<string>();
             ScriptSelectedComponents = new List<bool>();
             CheckNameSpace = NameSpace;
         }
 
-        foreach (System.Type T in GetAllSubTypes(typeof(Component)))
+        foreach (var T in GetAllSubTypes(typeof(ExposableMonobehavior)))
         {
-            //Script
-            if (T.Namespace == n && !ScriptComponents.Contains(T))
+            if(!ScriptComponents.Contains(T))
             {
+                Debug.Log(T.BaseType + " " + T.Name);
                 ScriptComponents.Add(T);
                 ScriptComponentNames.Add(T.Name);
                 if (Active.GetComponent(T) != null)

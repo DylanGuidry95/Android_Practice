@@ -11,11 +11,10 @@ public static class ExposeProperties
     {
         var emptyOptions = new GUILayoutOption[0];
         EditorGUILayout.BeginVertical(emptyOptions);
-
-        foreach(PropertyField field in properties)
+        foreach (PropertyField field in properties)
         {
             EditorGUILayout.BeginHorizontal(emptyOptions);
-            if(field.Type == SerializedPropertyType.Integer)
+            if (field.Type == SerializedPropertyType.Integer)
             {
                 var oldValue = (int)field.Getvalue();
                 var newValue = EditorGUILayout.IntField(field.Name, oldValue, emptyOptions);
@@ -23,7 +22,7 @@ public static class ExposeProperties
                     field.SetValue(newValue);
             }
 
-            else if(field.Type == SerializedPropertyType.Float)
+            else if (field.Type == SerializedPropertyType.Float)
             {
                 var oldValue = (float)field.Getvalue();
                 var newValue = EditorGUILayout.FloatField(field.Name, oldValue, emptyOptions);
@@ -74,7 +73,7 @@ public static class ExposeProperties
             else if (field.Type == SerializedPropertyType.ObjectReference)
             {
                 UnityEngine.Object oldValue = (UnityEngine.Object)field.Getvalue();
-                var newValue = EditorGUILayout.ObjectField(field.Name, oldValue, field.Info.PropertyType, true,emptyOptions);
+                var newValue = EditorGUILayout.ObjectField(field.Name, oldValue, field.Info.PropertyType, true, emptyOptions);
                 if (oldValue != newValue)
                     field.SetValue(newValue);
             }
