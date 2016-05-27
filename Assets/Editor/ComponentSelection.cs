@@ -7,15 +7,22 @@ using UnityEngine.Networking;
 
 public class ComponentSelection : EditorWindow
 {
-    static Transform Active;
+    static Transform Active; //Object currently selected and being viewed in the inspector.
 
+    /// <summary>
+    /// Creates a new window that display all components the user can add to the active object
+    /// Called in from CustomInspector script in the OnGUI function when the Add Components button
+    /// is pressed.
+    /// </summary>
+    /// <param name="p">Position we want to instantiate the window at</param>
+    /// <param name="a">refrence to the currently selected object in our inspector</param>
     public static void CreateWindow(Rect p, ref Transform a)
     {
-        ComponentSelection window = (ComponentSelection)EditorWindow.GetWindow(typeof(ComponentSelection));
-        window.Show();
-        window.position = p;
-        Active = a;
-        InstantiatePrimitive();
+        ComponentSelection window = (ComponentSelection)EditorWindow.GetWindow(typeof(ComponentSelection)); // Creates window
+        window.Show(); //Sets the current window in to focus
+        window.position = p; //Sets the position of the window equal to value of the arguemnt passed in of type Rect
+        Active = a; // Sets Active equal to the value of the arguement of type Transform
+        InstantiatePrimitive(); //Calls the InstantiatePrimitive fucntion.
     }
 
     //Network Components
