@@ -6,10 +6,13 @@ using System.Reflection;
 
 public class CustomInspectorWindow : EditorWindow
 {
-    static List<ExposableMonobehavior> Components; //All script components attached to the object that inherit/ implement the class ExposableMonobehavior
-    static List<PropertyField[]> ComponentFields; //All Properties/Fields of each Component attached to the object
-    
-    static List<bool> ActiveComponentsView; //Toggles for each component foldouts to be collapsed or expanded
+    static List<ExposableMonobehavior> ScriptComponents; //All script components attached to the object that inherit/ implement the class ExposableMonobehavior
+    static List<PropertyField[]> ScriptComponentFields; //All Properties/Fields of each Component attached to the object
+
+    static List<Component> UnityComponents;
+    static List<bool> ActivetUnityComponentsView;
+
+    static List<bool> ActiveScriptComponentsView; //Toggles for each component foldouts to be collapsed or expanded
 
     static Transform selectedObject; //Active item being viewed in the inspector
 
@@ -33,9 +36,13 @@ public class CustomInspectorWindow : EditorWindow
     /// <param name="active">Transform selected we want to check if is valid to be displayed in our new inspector window</param>
     public static void GetActiveObjectComponents(Transform active)
     {
-        ComponentFields = new List<PropertyField[]>(); //Blows out the ComponentFields list
-        Components = new List<ExposableMonobehavior>(); //Blows out the Components list
-        ActiveComponentsView = new List<bool>(); //Blows out the ActiveComponentsView list
+        ScriptComponentFields = new List<PropertyField[]>(); //Blows out the ComponentFields list
+        ScriptComponents = new List<ExposableMonobehavior>(); //Blows out the Components list
+
+        UnityComponents = new List<Component>();
+        ActivetUnityComponentsView = new List<bool>();
+
+        ActiveScriptComponentsView = new List<bool>(); //Blows out the ActiveComponentsView list
         if (active != null) //If active is not null
         {
             if (active.GetComponent<RectTransform>() == null && active.gameObject != null) //If active does not have a RectTransform Component and active is a gameobject
@@ -43,10 +50,18 @@ public class CustomInspectorWindow : EditorWindow
                 selectedObject = active; ; //Sets selected object to the value of active
                 foreach (ExposableMonobehavior c in selectedObject.GetComponents(typeof(ExposableMonobehavior))) //Loops through each Exposable Monobehavior in all components of type ExposableMonobehavior attached to our active gameobject
                 {
-                    Components.Add(c); //Adds the ExposableMonobehavior to out Components list
+                    ScriptComponents.Add(c); //Adds the ExposableMonobehavior to out Components list
                     PropertyField[] fields = ExposeProperties.GetProperties(c); //Creates a new array of PropertyField with the properties of the components we are looking at
-                    ComponentFields.Add(fields); //Adds the new array to the list of ComponentFields
-                    ActiveComponentsView.Add(true); //Adds a new boolean to the ActiveComponentsView list of true so when the items load into the window the foldout containing all the information is expanded
+                    ScriptComponentFields.Add(fields); //Adds the new array to the list of ComponentFields
+                    ActiveScriptComponentsView.Add(true); //Adds a new boolean to the ActiveComponentsView list of true so when the items load into the window the foldout containing all the information is expanded
+                }
+                foreach(Component c in selectedObject.GetComponents(typeof(Component)))
+                {
+                    if(c.GetType().BaseType != typeof(ExposableMonobehavior))
+                    {
+                        UnityComponents.Add(c);
+                        ActivetUnityComponentsView.Add(true);
+                    }
                 }
             }
         }
@@ -71,7 +86,23 @@ public class CustomInspectorWindow : EditorWindow
                 GetActiveObjectComponents(a); //Calls the GetActiveObjectComponents and passess the value of the new Transform created as an argument
             }
 
-            if(Components != null && ComponentFields != null) //If Components not null and ComponentFiels not null
+
+            if (UnityComponents != null)
+            {
+                for (int i = 0; i < UnityComponents.Count; i++)
+                {
+                    ActivetUnityComponentsView[i] = EditorGUILayout.Foldout(ActivetUnityComponentsView[i], UnityComponents[i].GetType().ToString());
+                    if (UnityComponents[i].GetType() == typeof(UnityEngine.Transform) && ActivetUnityComponentsView[i])
+                    {
+                        selectedObject.transform.position = EditorGUILayout.Vector3Field("Position", selectedObject.transform.position);
+                        selectedObject.eulerAngles = EditorGUILayout.Vector3Field("Rotation", selectedObject.eulerAngles);
+                        selectedObject.localScale = EditorGUILayout.Vector3Field("Scale", selectedObject.localScale);
+                    }
+                    GUILayout.Box("", new GUILayoutOption[] { GUILayout.ExpandWidth(true), GUILayout.Height(1) }); //Creates a GUI box as a divider to seperate the different components for readiblity.
+                }
+            }
+
+            if (ScriptComponents != null && ScriptComponentFields != null) //If Components not null and ComponentFiels not null
             {
                 if (Event.current.Equals(Event.KeyboardEvent("^left"))) //If keyboard event left control and left arrow are pressed at the same time
                     CollapseComponents(false); //Calls CollapseComponents and passes in false as the boolean argument
@@ -83,11 +114,11 @@ public class CustomInspectorWindow : EditorWindow
                 if (GUI.Button(new Rect(position.width / 2, position.height - 65, (position.width / 2) - 10, 25), "Expand")) //If the Expand button is pressesd
                     CollapseComponents(true); //Calls CollapseComponents and passes in true as the boolean argument
 
-                for (int i = 0; i < Components.Count; i++) //Iterates through indexes in the Components list.
+                for (int i = 0; i < ScriptComponents.Count; i++) //Iterates through indexes in the Components list.
                 {
-                    ActiveComponentsView[i] = EditorGUILayout.Foldout(ActiveComponentsView[i],Components[i].GetType().ToString()); //At the index of "i" we create a new Foldout UI element and set the value of ActiveComponentsView at the index of "i" to the state of the foldout(boolean value) 
-                    if(ActiveComponentsView[i]) //If ActiveComponentsView at the index of "i" is true
-                        ExposeProperties.Expose(ComponentFields[i]); //Calls the static function Expose from the ExposeProperties class and passes the arguement value of ComponentFields at the index of "i" 
+                    ActiveScriptComponentsView[i] = EditorGUILayout.Foldout(ActiveScriptComponentsView[i],ScriptComponents[i].GetType().ToString()); //At the index of "i" we create a new Foldout UI element and set the value of ActiveComponentsView at the index of "i" to the state of the foldout(boolean value) 
+                    if(ActiveScriptComponentsView[i]) //If ActiveComponentsView at the index of "i" is true
+                        ExposeProperties.Expose(ScriptComponentFields[i]); //Calls the static function Expose from the ExposeProperties class and passes the arguement value of ComponentFields at the index of "i" 
                     GUILayout.Box("", new GUILayoutOption[] { GUILayout.ExpandWidth(true), GUILayout.Height(1) }); //Creates a GUI box as a divider to seperate the different components for readiblity. 
                 }
             }
@@ -110,9 +141,13 @@ public class CustomInspectorWindow : EditorWindow
     /// <param name="state">State we want the component foldout to be in. (False = collapse, True = expand)</param>
     void CollapseComponents(bool state)
     {
-        for (int i = 0; i < ActiveComponentsView.Count; i++) // Iterates through the values of the ActiveCompoentsView list
+        for (int i = 0; i < ActiveScriptComponentsView.Count; i++) // Iterates through the values of the ActiveCompoentsView list
         {
-            ActiveComponentsView[i] = state; //Sets the value at AcitiveComponentsView at the index of "i" to the value of the state passed in
+            ActiveScriptComponentsView[i] = state; //Sets the value at AcitiveComponentsView at the index of "i" to the value of the state passed in
+        }
+        for (int i = 0; i < ActivetUnityComponentsView.Count; i++) // Iterates through the values of the ActiveCompoentsView list
+        {
+            ActivetUnityComponentsView[i] = state; //Sets the value at AcitiveComponentsView at the index of "i" to the value of the state passed in
         }
     }
 
