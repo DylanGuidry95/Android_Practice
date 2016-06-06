@@ -3,10 +3,18 @@ using System.Collections;
 namespace Scripts
 {
 
-    public class MathTest : MonoBehaviour
+    public class MathTest : ExposableMonobehavior
     {
-        public float TotalRotation = 0;
-        public GameObject Wheel;
+        [HideInInspector, SerializeField]
+        float TotalRotation = 0;
+        [HideInInspector, SerializeField]
+        MonoBehaviour Wheel;
+
+        [ExposeProperty]
+        public float Rotation { get { return TotalRotation; }set { TotalRotation = value; } }
+        [ExposeProperty]
+        public MonoBehaviour TheWheel { get { return Wheel; } set { Wheel = value; } }
+
         // Use this for initialization
         void Start()
         {

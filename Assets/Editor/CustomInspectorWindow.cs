@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using System.Reflection;
+using System;
 
 public class CustomInspectorWindow : EditorWindow
 {
@@ -86,17 +87,39 @@ public class CustomInspectorWindow : EditorWindow
                 GetActiveObjectComponents(a); //Calls the GetActiveObjectComponents and passess the value of the new Transform created as an argument
             }
 
-
             if (UnityComponents != null)
             {
                 for (int i = 0; i < UnityComponents.Count; i++)
                 {
-                    ActivetUnityComponentsView[i] = EditorGUILayout.Foldout(ActivetUnityComponentsView[i], UnityComponents[i].GetType().ToString());
+                    string[] typeSplit = UnityComponents[i].GetType().ToString().Split('.');
+                    ActivetUnityComponentsView[i] = EditorGUILayout.Foldout(ActivetUnityComponentsView[i], typeSplit[typeSplit.Length - 1]);
                     if (UnityComponents[i].GetType() == typeof(UnityEngine.Transform) && ActivetUnityComponentsView[i])
                     {
                         selectedObject.transform.position = EditorGUILayout.Vector3Field("Position", selectedObject.transform.position);
                         selectedObject.eulerAngles = EditorGUILayout.Vector3Field("Rotation", selectedObject.eulerAngles);
                         selectedObject.localScale = EditorGUILayout.Vector3Field("Scale", selectedObject.localScale);
+                    }
+                    if(UnityComponents[i].GetType() == typeof(UnityEngine.Rigidbody) && ActivetUnityComponentsView[i])
+                    {
+                        selectedObject.GetComponent<Rigidbody>().mass = EditorGUILayout.FloatField("Mass", selectedObject.GetComponent<Rigidbody>().mass);
+                        selectedObject.GetComponent<Rigidbody>().drag = EditorGUILayout.FloatField("Drag", selectedObject.GetComponent<Rigidbody>().drag);
+                        selectedObject.GetComponent<Rigidbody>().angularDrag = EditorGUILayout.FloatField("Angular Drag", selectedObject.GetComponent<Rigidbody>().angularDrag);
+                        selectedObject.GetComponent<Rigidbody>().useGravity = EditorGUILayout.Toggle("Use Gravity", selectedObject.GetComponent<Rigidbody>().useGravity);
+                        selectedObject.GetComponent<Rigidbody>().isKinematic = EditorGUILayout.Toggle("Is Kinematic", selectedObject.GetComponent<Rigidbody>().isKinematic);
+                        selectedObject.GetComponent<Rigidbody>().interpolation = (RigidbodyInterpolation)EditorGUILayout.EnumPopup("Interpolate", selectedObject.GetComponent<Rigidbody>().interpolation);
+                        selectedObject.GetComponent<Rigidbody>().collisionDetectionMode = (CollisionDetectionMode)EditorGUILayout.EnumPopup("Collision Detection", selectedObject.GetComponent<Rigidbody>().collisionDetectionMode);
+                    }
+                    if (UnityComponents[i].GetType() == typeof(UnityEngine.Rigidbody2D) && ActivetUnityComponentsView[i])
+                    {
+                        selectedObject.GetComponent<Rigidbody2D>().useAutoMass = EditorGUILayout.Toggle("Use Auto Mass", selectedObject.GetComponent<Rigidbody2D>().useAutoMass);
+                        selectedObject.GetComponent<Rigidbody2D>().mass = EditorGUILayout.FloatField("Mass", selectedObject.GetComponent<Rigidbody2D>().mass);
+                        selectedObject.GetComponent<Rigidbody2D>().drag = EditorGUILayout.FloatField("Drag", selectedObject.GetComponent<Rigidbody2D>().drag);
+                        selectedObject.GetComponent<Rigidbody2D>().angularDrag = EditorGUILayout.FloatField("Angular Drag", selectedObject.GetComponent<Rigidbody2D>().angularDrag);
+                        selectedObject.GetComponent<Rigidbody2D>().gravityScale = EditorGUILayout.FloatField("Gravity Scale", selectedObject.GetComponent<Rigidbody2D>().gravityScale);
+                        selectedObject.GetComponent<Rigidbody2D>().isKinematic = EditorGUILayout.Toggle("Is Kinematic", selectedObject.GetComponent<Rigidbody2D>().isKinematic);
+                        selectedObject.GetComponent<Rigidbody2D>().interpolation = (RigidbodyInterpolation2D)EditorGUILayout.EnumPopup("Interpolate", selectedObject.GetComponent<Rigidbody2D>().interpolation);
+                        selectedObject.GetComponent<Rigidbody2D>().sleepMode = (RigidbodySleepMode2D)EditorGUILayout.EnumPopup("Sleeping Mode", selectedObject.GetComponent<Rigidbody2D>().sleepMode);
+                        selectedObject.GetComponent<Rigidbody2D>().collisionDetectionMode = (CollisionDetectionMode2D)EditorGUILayout.EnumPopup("Collision Detection", selectedObject.GetComponent<Rigidbody2D>().collisionDetectionMode);
                     }
                     GUILayout.Box("", new GUILayoutOption[] { GUILayout.ExpandWidth(true), GUILayout.Height(1) }); //Creates a GUI box as a divider to seperate the different components for readiblity.
                 }
@@ -108,7 +131,6 @@ public class CustomInspectorWindow : EditorWindow
                     CollapseComponents(false); //Calls CollapseComponents and passes in false as the boolean argument
                 if (Event.current.Equals(Event.KeyboardEvent("^right"))) //If keyboard event left control and right arrow are pressed at the same time
                     CollapseComponents(true); //Calls CollapseComponents and passes in true as the boolean argument
-
                 if (GUI.Button(new Rect(10, position.height - 65, position.width / 2, 25), "Collapse")) //If the Collapse button is pressed
                     CollapseComponents(false); //Calls CollapseComponents and passes in false as the boolean argument
                 if (GUI.Button(new Rect(position.width / 2, position.height - 65, (position.width / 2) - 10, 25), "Expand")) //If the Expand button is pressesd
@@ -116,7 +138,8 @@ public class CustomInspectorWindow : EditorWindow
 
                 for (int i = 0; i < ScriptComponents.Count; i++) //Iterates through indexes in the Components list.
                 {
-                    ActiveScriptComponentsView[i] = EditorGUILayout.Foldout(ActiveScriptComponentsView[i],ScriptComponents[i].GetType().ToString()); //At the index of "i" we create a new Foldout UI element and set the value of ActiveComponentsView at the index of "i" to the state of the foldout(boolean value) 
+                    string[] typeSplit = ScriptComponents[i].GetType().ToString().Split('.');
+                    ActiveScriptComponentsView[i] = EditorGUILayout.Foldout(ActiveScriptComponentsView[i],typeSplit[typeSplit.Length - 1]); //At the index of "i" we create a new Foldout UI element and set the value of ActiveComponentsView at the index of "i" to the state of the foldout(boolean value) 
                     if(ActiveScriptComponentsView[i]) //If ActiveComponentsView at the index of "i" is true
                         ExposeProperties.Expose(ScriptComponentFields[i]); //Calls the static function Expose from the ExposeProperties class and passes the arguement value of ComponentFields at the index of "i" 
                     GUILayout.Box("", new GUILayoutOption[] { GUILayout.ExpandWidth(true), GUILayout.Height(1) }); //Creates a GUI box as a divider to seperate the different components for readiblity. 
